@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import './App.css';
 import logo from './logo.svg';
+import Dashboard from "./Dashboard";
 
 /*
 Use React and the data below to display a list of users alongside their favorite movies.
@@ -98,6 +99,31 @@ const movies = {
 };
 
 class App extends Component {
+
+  /*
+  The constructor is a "special method for creating and initializing an object."
+  (https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Classes). The
+  Component's constructor is the first thing that runs when the object is created.
+  */
+  constructor(props) {
+    super(props);
+    this.usersByMovie = {};
+
+    profiles.forEach(profile => {
+      const movieID = profile.favoriteMovieID;
+
+      if (this.usersByMovie[movieID]) {
+        this.usersByMovie[movieID].push(profile.userID);
+      } else {
+        this.usersByMovie[movieID] = [profile.userID];
+      }
+    });
+  }
+
+  /*
+  The render method gets called automatically every time the value of the
+  component's props changes.
+  */
   render() {
     return (
       <div>
@@ -106,7 +132,7 @@ class App extends Component {
           <h1 className="App-title">ReactND - Coding Practice</h1>
         </header>
         <h2>Favorite Movies</h2>
-		<ul>
+        <ul>
           {/*
           For each object in the profiles array, make a list of JSX elements.
           The map function returns a new array, which will
@@ -134,6 +160,21 @@ class App extends Component {
             );
           })}
         </ul>
+        
+        {/* Part 2 */}
+        <header className="App-header">
+          <img src={logo} className="App-logo" alt="logo" />
+          <h1 className="App-title">ReactND - Coding Practice</h1>
+        </header>
+        <h2>How Popular is Your Favorite Movie?</h2>
+        <Dashboard
+          profiles={profiles}
+          movies={movies}
+          users={users}
+          usersByMovie={this.usersByMovie}
+        />
+        {console.log(this.usersByMovie)}
+        
       </div>
     );
   }
